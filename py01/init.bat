@@ -1,1 +1,3 @@
-venv\Scripts\pip install pyinstaller
+pushd venv\Scripts
+pip install pyinstaller
+popd
