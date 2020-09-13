@@ -27,6 +27,7 @@ new_file_names = []
 
 while True:             # Event Loop
     event, values = window.read()
+    print(event, values)
     if event in (None, '終了'):
         break
 
