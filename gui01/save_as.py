@@ -20,29 +20,27 @@ def gui_main():
             break
         if event == '-READ_BTN-':
             # filename = get_file_name_to_open(window, width=50)
-            filename = sgui_get_file_name_to_open(pattern='*.txt;*.bxproj', width=60, verb='処理する')
+            filename = sgui_get_file_name_to_open(
+                pattern='*.txt;*.bxproj', width=60, verb='処理する', initial_folder='C:/temp')
             print('filename={}'.format(filename))
             if filename:
                 window.FindElement('-FILE-').Update(filename)
             else:
                 window.FindElement('-FILE-').Update('')
         if event == '-SAVE_AS_BTN-':
-            filename = sgui_get_file_name_to_save(pattern='*.txt', )
+            filename = sgui_get_file_name_to_save(pattern='*.txt', initial_folder='C:/temp')
             print(filename)
         if event == '-FOLDER_BTN-':
-            filename = sgui_get_folder_name()
+            filename = sgui_get_folder_name(initial_folder='C:/temp')
             print(filename)
 
     window.Close()
 
     import os, time, sys, subprocess
 
-    # o = subprocess.run([sys.executable, "longtask.py", '123'], check=False, capture_output=True)
-    # print((o.stdout, o.stderr))
-
-    task_subprocess_run1(__file__, ['-h'])
-    task_subprocess_run1(__file__, ['install', '-s', '{type=msys32, font_size=14}', '11', '22'])
-    task_subprocess_run1(__file__, ['install', '-w', '-s={type=msys32, font_size=14}', '11', '22'])
+    # task_subprocess_run1(__file__, ['-h'])
+    # task_subprocess_run1(__file__, ['install', '-s', '{type=msys32, font_size=14}', '11', '22'])
+    # task_subprocess_run1(__file__, ['install', '-w', '-s={type=msys32, font_size=14}', '11', '22'])
 
 
 def console_main():
@@ -76,6 +74,8 @@ def console_main():
 
 if __name__ == '__main__':
     print(len(sys.argv))
+
+    gui_main()
 
     # if len(sys.argv) <= 1:
     #     gui_main()

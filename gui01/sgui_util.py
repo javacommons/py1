@@ -3,7 +3,8 @@ def sgui_get_file_name_to_open(parent=None,
                                width=50,
                                message='開くファイルを指定してください',
                                title='ファイルを開く',
-                               verb='開く'):
+                               verb='開く',
+                               initial_folder=None):
     import PySimpleGUI as sg
     import os
     keep_on_top = True
@@ -16,7 +17,8 @@ def sgui_get_file_name_to_open(parent=None,
         event, values = sg.Window(title,
                                   [[sg.Text(message)],
                                    [sg.Input(filename, size=(width, 1), key='-PATH-'),
-                                    sg.FileBrowse('参照', file_types=((pattern, pattern),))],
+                                    sg.FileBrowse('参照', file_types=((pattern, pattern),),
+                                                  initial_folder=initial_folder)],
                                    [sg.Open(verb, key='-DOIT-'), sg.Cancel('キャンセル', key='-CANCEL-')]],
                                   keep_on_top=keep_on_top).read(close=True)
         # print(event, values)
@@ -50,7 +52,8 @@ def sgui_get_file_name_to_save(parent=None,
                                width=50,
                                message='保存先のファイルを指定してください',
                                title='名前を付けて保存',
-                               verb='保存'):
+                               verb='保存',
+                               initial_folder=None):
     import PySimpleGUI as sg
     import os
     keep_on_top = True
@@ -62,7 +65,9 @@ def sgui_get_file_name_to_save(parent=None,
     while True:
         event, values = sg.Window(title,
                                   [[sg.Text(message)],
-                                   [sg.Input(filename, size=(width, 1), key='-PATH-'), sg.FileSaveAs('参照', file_types=((pattern, pattern),))],
+                                   [sg.Input(filename, size=(width, 1), key='-PATH-'),
+                                    sg.FileSaveAs('参照', file_types=((pattern, pattern),),
+                                                  initial_folder=initial_folder)],
                                    [sg.Open(verb, key='-DOIT-'), sg.Cancel('キャンセル', key='-CANCEL-')]],
                                   keep_on_top=keep_on_top).read(close=True)
         # print(event, values)
@@ -107,7 +112,8 @@ def sgui_get_folder_name(parent=None,
                          width=50,
                          message='フォルダを指定してください',
                          title='フォルダ選択',
-                         verb='選択'):
+                         verb='選択',
+                         initial_folder=None):
     import PySimpleGUI as sg
     import os
     keep_on_top = True
@@ -119,7 +125,8 @@ def sgui_get_folder_name(parent=None,
     while True:
         event, values = sg.Window(title,
                                   [[sg.Text(message)],
-                                   [sg.Input(filename, size=(width, 1), key='-PATH-'), sg.FolderBrowse('参照')],
+                                   [sg.Input(filename, size=(width, 1), key='-PATH-'),
+                                    sg.FolderBrowse('参照', initial_folder=initial_folder)],
                                    [sg.Open(verb, key='-DOIT-'), sg.Cancel('キャンセル', key='-CANCEL-')]],
                                   keep_on_top=keep_on_top).read(close=True)
         # print(event, values)
