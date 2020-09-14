@@ -1,4 +1,4 @@
-def _sgui_parse_file_pattern(pattern):
+def _psgui_parse_file_pattern(pattern):
     pattern_list = pattern.split(';')
     result = []
     for p in pattern_list:
@@ -8,7 +8,7 @@ def _sgui_parse_file_pattern(pattern):
 
 
 def _sgui_adjust_save_path(path, pattern):
-    suffix_list = _sgui_parse_file_pattern(pattern)
+    suffix_list = _psgui_parse_file_pattern(pattern)
     if len(suffix_list) == 0:
         return path
     for s in suffix_list:
@@ -17,16 +17,15 @@ def _sgui_adjust_save_path(path, pattern):
     return path + suffix_list[0]
 
 
-def sgui_get_file_name_to_open(parent=None,
-                               pattern='*.*',
-                               width=50,
-                               message='開くファイルを指定してください',
-                               title='ファイルを開く',
-                               verb='開く',
-                               old_value=None):
+def psgui_get_file_name_to_open(parent=None,
+                                pattern='*.*',
+                                width=50,
+                                message='開くファイルを指定してください',
+                                title='ファイルを開く',
+                                verb='開く',
+                                old_value=None):
     import PySimpleGUI as sg
     import os
-    import winshell
     keep_on_top = True
     if parent:
         keep_on_top = False
@@ -35,12 +34,12 @@ def sgui_get_file_name_to_open(parent=None,
     initial_folder = None
     if old_value:
         if old_value.strip() == '':
-            initial_folder = winshell.desktop()
+            initial_folder = os.path.expanduser('~')
         else:
             old_value = os.path.abspath(old_value).replace('\\', '/')
             initial_folder = os.path.dirname(old_value)
     else:
-        initial_folder = winshell.desktop()
+        initial_folder = os.path.expanduser('~')
     filename = ''
     while True:
         event, values = sg.Window(title,
@@ -76,16 +75,15 @@ def sgui_get_file_name_to_open(parent=None,
     return None if not filename else filename.replace('\\', '/')
 
 
-def sgui_get_file_name_to_save(parent=None,
-                               pattern='*.*',
-                               width=50,
-                               message='保存先のファイルを指定してください',
-                               title='名前を付けて保存',
-                               verb='保存',
-                               old_value=None):
+def psgui_get_file_name_to_save(parent=None,
+                                pattern='*.*',
+                                width=50,
+                                message='保存先のファイルを指定してください',
+                                title='名前を付けて保存',
+                                verb='保存',
+                                old_value=None):
     import PySimpleGUI as sg
     import os
-    import winshell
     keep_on_top = True
     if parent:
         keep_on_top = False
@@ -94,12 +92,12 @@ def sgui_get_file_name_to_save(parent=None,
     initial_folder = None
     if old_value:
         if old_value.strip() == '':
-            initial_folder = winshell.desktop()
+            initial_folder = os.path.expanduser('~')
         else:
             old_value = os.path.abspath(old_value).replace('\\', '/')
             initial_folder = os.path.dirname(old_value)
     else:
-        initial_folder = winshell.desktop()
+        initial_folder = os.path.expanduser('~')
     filename = ''
     while True:
         event, values = sg.Window(title,
@@ -148,15 +146,14 @@ def sgui_get_file_name_to_save(parent=None,
     return None if not filename else filename.replace('\\', '/')
 
 
-def sgui_get_folder_name(parent=None,
-                         width=50,
-                         message='フォルダを指定してください',
-                         title='フォルダ選択',
-                         verb='選択',
-                         old_value=None):
+def psgui_get_folder_name(parent=None,
+                          width=50,
+                          message='フォルダを指定してください',
+                          title='フォルダ選択',
+                          verb='選択',
+                          old_value=None):
     import PySimpleGUI as sg
     import os
-    import winshell
     keep_on_top = True
     if parent:
         keep_on_top = False
@@ -165,12 +162,12 @@ def sgui_get_folder_name(parent=None,
     initial_folder = None
     if old_value:
         if old_value.strip() == '':
-            initial_folder = winshell.desktop()
+            initial_folder = os.path.expanduser('~')
         else:
             old_value = os.path.abspath(old_value).replace('\\', '/')
             initial_folder = old_value
     else:
-        initial_folder = winshell.desktop()
+        initial_folder = os.path.expanduser('~')
     filename = ''
     while True:
         event, values = sg.Window(title,

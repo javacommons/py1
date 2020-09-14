@@ -1,4 +1,3 @@
-import sys
 import PySimpleGUI as sg
 from sgui_util import *
 
@@ -19,7 +18,7 @@ def gui_main():
             break
         if event == '-READ_BTN-':
             # filename = get_file_name_to_open(window, width=50)
-            filename = sgui_get_file_name_to_open(
+            filename = psgui_get_file_name_to_open(
                 pattern='*.txt;*.bxproj', width=60, verb='処理する', old_value=window.FindElement('-FILE-').Get())
             print('filename={}'.format(filename))
             if filename:
@@ -27,7 +26,7 @@ def gui_main():
             else:
                 window.FindElement('-FILE-').Update('')
         if event == '-SAVE_AS_BTN-':
-            filename = sgui_get_file_name_to_save(
+            filename = psgui_get_file_name_to_save(
                 pattern='*.txt;*.log', old_value=window.FindElement('-FILE_TO_SAVE-').Get())
             print(filename)
             if filename:
@@ -35,7 +34,7 @@ def gui_main():
             else:
                 window.FindElement('-FILE_TO_SAVE-').Update('')
         if event == '-FOLDER_BTN-':
-            filename = sgui_get_folder_name(old_value=window.FindElement('-FOLDER-').Get())
+            filename = psgui_get_folder_name(old_value=window.FindElement('-FOLDER-').Get())
             print(filename)
             if filename:
                 window.FindElement('-FOLDER-').Update(filename)
@@ -54,19 +53,21 @@ if __name__ == '__main__':
     import logging
     import time
 
-    CommonThread.setup_basic_logging(format='%(threadName)s ==> %(message)s')
+    CommonThreadLogger.setup_basic_logging(format='%(threadName)s ==> %(message)s')
+    lg = CommonThreadLogger()
+
 
     def worker1(th, *args, **kwargs):
-        th.log_debug('start')
-        th.log_debug(args)
-        th.log_debug(kwargs)
+        lg.debug('start')
+        lg.debug(args)
+        lg.debug(kwargs)
         th.output('from worker1')
         time.sleep(2)
-        th.log_debug('end')
+        lg.debug('end')
 
     def worker3(th, *args):
-        th.log_debug('start')
-        th.log_debug(args)
+        lg.debug('start')
+        lg.debug(args)
         th.add_argument('operation', choices=['install', 'uninstall', 'update'], help='type of operation')
         th.add_argument('x')
         th.add_argument('y')
@@ -74,9 +75,9 @@ if __name__ == '__main__':
         th.add_argument('-w', action='store_true')
         th.add_argument('rest', nargs='*', help='file or directory')
         th.parse_args()
-        th.log_debug(th.params)
+        lg.debug(th.params)
         time.sleep(2)
-        th.log_debug('end')
+        lg.debug('end')
 
     class MyThread(CommonThread):
 
@@ -84,14 +85,14 @@ if __name__ == '__main__':
             CommonThread.__init__(self, *args, **kwargs)
 
         def entry(self, *args, **kwargs):
-            self.log_debug('Starting Thread named {}, args={}, kwargs={}'.format(self.name, args, kwargs))
+            lg.debug('Starting Thread named {}, args={}, kwargs={}'.format(self.name, args, kwargs))
             self.outq.put(['this', 'is', 'array'])
-            self.log_debug(self.args)
+            lg.debug(self.args)
             for i in self.args:
-                self.log_debug(i)
+                lg.debug(i)
                 self.output(i)
             time.sleep(5)
-            self.log_debug('end')
+            lg.debug('end')
 
     class ParserThread(CommonThread):
 
@@ -103,11 +104,11 @@ if __name__ == '__main__':
             self.add_argument('y')
             # self.add_argument('z')
             result = self.parse_args()
-            self.log_debug(result)
+            lg.debug(result)
             while True:
                 inputs = self.inputs_available()
                 for i in inputs:
-                    self.log_debug(i)
+                    lg.debug(i)
                     if i is None:
                         return
 
