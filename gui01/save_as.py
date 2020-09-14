@@ -117,22 +117,49 @@ if __name__ == '__main__':
         time.sleep(5)
         logging.debug('end')
 
+    class CommonThread(threading.Thread):
+        # all_threads = []
 
-    class myThread(threading.Thread):
-        def __init__(self, counter, *args):
+        def __init__(self, *args):
             threading.Thread.__init__(self)
-            # self.threadID = threadID
-            # self.name = name
-            self.counter = counter
+            # super(CommonThread, self).__init__(self)
             self.args = args
+            self.inq = queue.Queue()
+            self.outq = queue.Queue()
+            # CommonThread.all_threads.append(self)
+
+        @classmethod
+        def some_are_active(cls):
+            for thread in threading.enumerate():
+                if isinstance(thread, CommonThread):
+                    # print('thread.name={}'.format(thread.name))
+                    return True
+            return False
+
+        @classmethod
+        def log_active_threads(cls):
+            for thread in threading.enumerate():
+                if not isinstance(thread, CommonThread):
+                    continue
+                while not thread.outq.empty():
+                    logging.debug(thread.outq.get())
+
+    class MyThread(CommonThread):
+        def __init__(self, *args):
+            # CommonThread.__init__(self, *args)
+            super(MyThread, self).__init__(self, *args)
 
         def run(self):
-            logging.debug('Starting Thread named {}, counter {}'.format(self.name, self.counter))
-            print('Starting Thread named {}, counter {}'.format(self.name, self.counter))
+            logging.debug('Starting Thread named {}, args={} inq={}, outq={}'.format(
+                self.name, self.args, self.inq, self.outq))
             for i in self.args:
-                print(i)
+                logging.debug(i)
+                self.outq.put(i)
+            time.sleep(5)
+            logging.debug('end')
 
-    t0 = myThread(2, 'ONE', 'TWO', 'THREE')
+    logging.debug('starting')
+    t0 = MyThread('ONE', 'TWO', 'THREE')
     t0.start()
     # スレッドに workder1 関数を渡す
     t1 = threading.Thread(name='Thread-A', target=worker1)
@@ -140,23 +167,22 @@ if __name__ == '__main__':
     # スレッドスタート
     t1.start()
     t2.start()
-    print('started')
-    # while t1.is_alive():
-    #     time.sleep(0.001)
-    # # t1.join()
-    # t2.join()
-    while t2.is_alive():
+    logging.debug('started')
+    print(CommonThread.some_are_active())
+    while CommonThread.some_are_active():
         time.sleep(0.001)
-        if q.empty(): continue
-        x = q.get()
-        print(x)
+        CommonThread.log_active_threads()
+        # while not t0.outq.empty():
+        #     x = t0.outq.get()
+        #     logging.debug(x)
+    # while not t0.outq.empty():
+    #     x = t0.outq.get()
+    #     logging.debug(x)
+    CommonThread.log_active_threads()
 
-    class MyClass:
-        def __init__(self, num):
-            self.num = num
-        def print_num(self):
-            print(self.num)
+    t0.join()
+    t1.join()
+    t2.join()
+    print(CommonThread.some_are_active())
 
-    mc = MyClass(32)
-    mc.print_num()
-    print(mc.num)
+    # logging.debug(len(CommonThread.all_threads))
