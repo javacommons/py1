@@ -151,7 +151,7 @@ if __name__ == '__main__':
     t2.name = 't2@ParserThread'
     t2.start()
 
-    t3 = commonthread.WorkerThread(worker3, 'abc', 'XYZ', '-z=zzz')
+    t3 = commonthread.WorkerThread(worker3, 'abc', 'XYZ', '-z', 78.654321)
     t3.name = "worker3"
     t3.start()
 
