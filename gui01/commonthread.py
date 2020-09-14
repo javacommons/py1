@@ -26,3 +26,13 @@ class CommonThread(threading.Thread):
                 continue
             while not thread.outq.empty():
                 logging.debug(thread.outq.get())
+
+
+class WorkerThread(CommonThread):
+    def __init__(self, worker_function, *args):
+        CommonThread.__init__(self, *args)
+        self.worker_function = worker_function
+
+    def run(self):
+        self.worker_function(*self.args)
+        return None

@@ -102,9 +102,10 @@ if __name__ == '__main__':
 
     q = queue.Queue()
 
-    def worker1():
+    def worker1(*args):
         # thread の名前を取得
         logging.debug('start')
+        logging.debug(args)
         time.sleep(2)
         logging.debug('end')
 
@@ -137,7 +138,9 @@ if __name__ == '__main__':
     t0 = MyThread('ONE', 'TWO', 'THREE')
     t0.start()
     # スレッドに workder1 関数を渡す
-    t1 = threading.Thread(name='Thread-A', target=worker1)
+    # t1 = threading.Thread(name='Thread-A', target=worker1)
+    t1 = commonthread.WorkerThread(worker1, 123, 'abc', 4.56)
+    t1.name = "worker1"
     t2 = threading.Thread(target=worker2, args=(q,), kwargs={'y': 200, 'argv': ['a', 123, 456.7]})
     # スレッドスタート
     t1.start()
