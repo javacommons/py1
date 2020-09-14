@@ -172,17 +172,11 @@ if __name__ == '__main__':
     while CommonThread.some_are_active():
         time.sleep(0.001)
         CommonThread.log_active_threads()
-        # while not t0.outq.empty():
-        #     x = t0.outq.get()
-        #     logging.debug(x)
-    # while not t0.outq.empty():
-    #     x = t0.outq.get()
-    #     logging.debug(x)
     CommonThread.log_active_threads()
 
-    t0.join()
-    t1.join()
-    t2.join()
+    # t0.join()
+    # t1.join()
+    # t2.join()
     print(CommonThread.some_are_active())
 
     # logging.debug(len(CommonThread.all_threads))
