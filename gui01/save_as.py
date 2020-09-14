@@ -89,14 +89,13 @@ if __name__ == '__main__':
     import logging
     import time
 
-    logging.basicConfig(level=logging.DEBUG, format='%(threadName)s: %(message)s')
+    commonthread.CommonThread.set_basic_logging(format='%(threadName)s:: %(message)s')
 
-
-    def worker1(p, *args):
+    def worker1(thread, *args):
         # thread の名前を取得
         logging.debug('start')
         logging.debug(args)
-        p.outq.put('from worker1')
+        thread.outq.put('from worker1')
         time.sleep(2)
         logging.debug('end')
 
@@ -145,8 +144,8 @@ if __name__ == '__main__':
     print(commonthread.CommonThread.some_are_active())
     while commonthread.CommonThread.some_are_active():
         time.sleep(0.001)
-        commonthread.CommonThread.log_active_threads()
-    commonthread.CommonThread.log_active_threads()
+        commonthread.CommonThread.log_threads_output(use_print=True)
+    commonthread.CommonThread.log_threads_output(use_print=True)
 
     # t0.join()
     # t1.join()

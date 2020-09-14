@@ -13,6 +13,10 @@ class CommonThread(threading.Thread):
         self.outq = queue.Queue()
 
     @classmethod
+    def set_basic_logging(cls, level=logging.DEBUG, format='%(threadName)s: %(message)s'):
+        logging.basicConfig(level=level, format=format)
+
+    @classmethod
     def some_are_active(cls):
         for thread in threading.enumerate():
             if isinstance(thread, CommonThread):
@@ -20,12 +24,23 @@ class CommonThread(threading.Thread):
         return False
 
     @classmethod
-    def log_active_threads(cls):
+    def collect_threads_output(cls):
+        result = []
         for thread in threading.enumerate():
             if not isinstance(thread, CommonThread):
                 continue
             while not thread.outq.empty():
-                logging.debug(thread.outq.get())
+                result.append(thread.outq.get())
+        return result
+
+    @classmethod
+    def log_threads_output(cls, use_print=False):
+        msg_list = CommonThread.collect_threads_output()
+        for msg in msg_list:
+            if use_print:
+                print(msg)
+            else:
+                logging.debug(msg)
 
 
 class ArgumentParserThread(CommonThread):
@@ -39,20 +54,12 @@ class ArgumentParserThread(CommonThread):
         self.args = self.parser.parse_args(self.params)
 
 
-class WorkerThreadParams:
-
-    def __init__(self, inq, outq):
-        self.inq = inq
-        self.outq = outq
-
-
-class WorkerThread(CommonThread):
+class WorkerThread(ArgumentParserThread):
 
     def __init__(self, worker_function, *params):
-        CommonThread.__init__(self, *params)
+        ArgumentParserThread.__init__(self, *params)
         self.worker_function = worker_function
 
     def run(self):
-        o = WorkerThreadParams(self.inq, self.outq)
-        self.worker_function(o, *self.params)
+        self.worker_function(self, *self.params)
         return None
