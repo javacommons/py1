@@ -1,7 +1,6 @@
 import sys
 import PySimpleGUI as sg
 from sgui_util import *
-from task_util import *
 
 
 def gui_main():
@@ -97,6 +96,7 @@ if __name__ == '__main__':
     import threading
     import time
     import queue
+    import commonthread
 
     logging.basicConfig(level=logging.DEBUG, format='%(threadName)s: %(message)s')
 
@@ -117,34 +117,10 @@ if __name__ == '__main__':
         time.sleep(5)
         logging.debug('end')
 
-    class CommonThread(threading.Thread):
 
+    class MyThread(commonthread.CommonThread):
         def __init__(self, *args):
-            threading.Thread.__init__(self)
-            self.args = args
-            self.inq = queue.Queue()
-            self.outq = queue.Queue()
-            # CommonThread.all_threads.append(self)
-
-        @classmethod
-        def some_are_active(cls):
-            for thread in threading.enumerate():
-                if isinstance(thread, CommonThread):
-                    # print('thread.name={}'.format(thread.name))
-                    return True
-            return False
-
-        @classmethod
-        def log_active_threads(cls):
-            for thread in threading.enumerate():
-                if not isinstance(thread, CommonThread):
-                    continue
-                while not thread.outq.empty():
-                    logging.debug(thread.outq.get())
-
-    class MyThread(CommonThread):
-        def __init__(self, *args):
-            CommonThread.__init__(self, *args)
+            commonthread.CommonThread.__init__(self, *args)
 
         def run(self):
             logging.debug('Starting Thread named {}, args={} inq={}, outq={}'.format(
@@ -167,14 +143,14 @@ if __name__ == '__main__':
     t1.start()
     t2.start()
     logging.debug('started')
-    print(CommonThread.some_are_active())
-    while CommonThread.some_are_active():
+    print(commonthread.CommonThread.some_are_active())
+    while commonthread.CommonThread.some_are_active():
         time.sleep(0.001)
-        CommonThread.log_active_threads()
-    CommonThread.log_active_threads()
+        commonthread.CommonThread.log_active_threads()
+    commonthread.CommonThread.log_active_threads()
 
     # t0.join()
     # t1.join()
     # t2.join()
 
-    print(CommonThread.some_are_active())
+    print(commonthread.CommonThread.some_are_active())
