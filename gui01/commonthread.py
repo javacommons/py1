@@ -31,10 +31,34 @@ class CommonThread(threading.Thread):
         self.params = self.parser.parse_args(str_array)
 
     def output(self, item, block=True, timeout=None):
+        assert threading.current_thread() == self
         return self.outq.put(item, block, timeout)
 
     def input(self, block=True, timeout=None):
+        assert threading.current_thread() == self
+        return self.inq.get(block, timeout)
+
+    def inputs_available(self):
+        assert threading.current_thread() == self
+        result = []
+        while not self.inq.empty():
+            result.append(self.inq.get())
+        return result
+
+    def send(self, item, block=True, timeout=None):
+        assert threading.current_thread() != self
+        return self.inq.put(item, block, timeout)
+
+    def receive(self, block=True, timeout=None):
+        assert threading.current_thread() != self
         return self.outq.get(block, timeout)
+
+    def receive_available(self):
+        assert threading.current_thread() != self
+        result = []
+        while not self.outq.empty():
+            result.append(self.outq.get())
+        return result
 
     def log_debug(self, msg):
         return logging.debug(msg)

@@ -83,7 +83,6 @@ if __name__ == '__main__':
         def __init__(self, *args, **kwargs):
             CommonThread.__init__(self, *args, **kwargs)
 
-        # def run(self):
         def entry(self, *args, **kwargs):
             self.log_debug('Starting Thread named {}, args={}, kwargs={}'.format(self.name, args, kwargs))
             self.outq.put(['this', 'is', 'array'])
@@ -99,12 +98,18 @@ if __name__ == '__main__':
         def __init__(self, *args, **kwargs):
             CommonThread.__init__(self, *args, **kwargs)
 
-        def run(self):
+        def entry(self, *args, **kwargs):
             self.add_argument('x')
             self.add_argument('y')
             # self.add_argument('z')
             self.parse_args()
             self.log_debug(self.params)
+            while True:
+                inputs = self.inputs_available()
+                for i in inputs:
+                    self.log_debug(i)
+                    if i is None:
+                        return
 
     logging.debug('starting')
 
@@ -123,6 +128,13 @@ if __name__ == '__main__':
     t3 = WorkerThread(worker3, 'install', '-z', 78.654321, 'abc', 'XYZ', 123, 456)
     t3.name = "worker3"
     t3.start()
+
+    for i in range(30):
+        print(i)
+        # t2.inq.put(i)
+        t2.send(i)
+    # t2.inq.put(None)
+    t2.send(None)
 
     logging.debug('started')
     print(CommonThread.some_are_active())
