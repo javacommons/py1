@@ -63,6 +63,14 @@ def console_main():
     print('w={}'.format(args.w))
     print('rest={}'.format(args.rest))
 
+    args2 = parser.parse_args(['uninstall', '-w', '-s={type=msys32, font_size=14}', '123', '456'])
+    print('operation={}'.format(args2.operation))
+    print('spec={}'.format(args2.spec))
+    print('inst_dir={}'.format(args2.inst_dir))
+    print('argX={}'.format(args2.argX))
+    print('w={}'.format(args2.w))
+    print('rest={}'.format(args2.rest))
+
 
 if __name__ == '__main__':
     print(len(sys.argv))
@@ -71,5 +79,7 @@ if __name__ == '__main__':
         gui_main()
     else:
         console_main()
+
+    print(['11', 22] + ['A', 'B'])
 
     print('end')
