@@ -47,7 +47,7 @@ class WorkerThread(CommonThread):
         return None
 
 
-class ArgParserThread(CommonThread):
+class ArgumentParserThread(CommonThread):
 
     def __init__(self, *params):
         CommonThread.__init__(self, *params)

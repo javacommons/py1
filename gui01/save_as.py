@@ -116,6 +116,18 @@ if __name__ == '__main__':
             time.sleep(5)
             logging.debug('end')
 
+    class ParserThread(commonthread.ArgumentParserThread):
+
+        def __init__(self, *args):
+            commonthread.ArgumentParserThread.__init__(self, *args)
+
+        def run(self):
+            self.parser.add_argument('x')
+            self.parser.add_argument('y')
+            # self.parser.add_argument('z')
+            self.parse()
+            logging.debug(self.args)
+
     logging.debug('starting')
 
     t0 = MyThread('ONE', 'TWO', 'THREE')
@@ -125,6 +137,9 @@ if __name__ == '__main__':
     t1 = commonthread.WorkerThread(worker1, 123, 'abc', 4.56)
     t1.name = "worker1"
     t1.start()
+
+    t2 = ParserThread('123', '456')
+    t2.start()
 
     logging.debug('started')
     print(commonthread.CommonThread.some_are_active())
