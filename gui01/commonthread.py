@@ -27,6 +27,13 @@ class CommonThread(threading.Thread):
                 logging.debug(thread.outq.get())
 
 
+class WorkerThreadParams:
+
+    def __init__(self, inq, outq):
+        self.inq = inq
+        self.outq = outq
+
+
 class WorkerThread(CommonThread):
 
     def __init__(self, worker_function, *args):
@@ -34,5 +41,6 @@ class WorkerThread(CommonThread):
         self.worker_function = worker_function
 
     def run(self):
-        self.worker_function(self.inq, self.outq, *self.args)
+        o = WorkerThreadParams(self.inq, self.outq)
+        self.worker_function(o, *self.args)
         return None
