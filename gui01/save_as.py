@@ -1,14 +1,10 @@
-# click a button to browse for a file
-# contents of selected file is displayed
-import PySimpleGUI as sg
-import os
-
-
 def get_file_name_to_open(parent=None,
                           message='開くファイルを指定してください',
                           title='ファイルを開く',
                           verb='開く',
                           width=50):
+    import PySimpleGUI as sg
+    import os
     keep_on_top = True
     if parent:
         keep_on_top = False
@@ -35,13 +31,16 @@ def get_file_name_to_open(parent=None,
             break
     if parent:
         parent.UnHide()
-    return filename.replace('\\', '/')
+    return None if not filename else filename.replace('\\', '/')
+
 
 def get_file_name_to_save(parent=None,
                           message='保存先のファイルを指定してください',
                           title='名前を付けて保存',
                           verb='保存',
                           width=50):
+    import PySimpleGUI as sg
+    import os
     keep_on_top = True
     if parent:
         keep_on_top = False
@@ -88,31 +87,34 @@ def get_file_name_to_save(parent=None,
             break
     if parent:
         parent.UnHide()
-    return filename.replace('\\', '/')
+    return None if not filename else filename.replace('\\', '/')
 
 
-layout = [
-    [sg.Button('読込', key='-READ_BTN-'), sg.Text(size=(80, 1), key='-FILE-')],
-    [sg.Button('名前を付けて保存', key='-SAVE_AS_BTN-'), sg.Text(size=(80, 1), key='-FILE_TO_SAVE-')]
-]
+if __name__ == '__main__':
+    import PySimpleGUI as sg
 
-window = sg.Window('File Browser', layout)
+    layout = [
+        [sg.Button('読込', key='-READ_BTN-'), sg.Text(size=(80, 1), key='-FILE-')],
+        [sg.Button('名前を付けて保存', key='-SAVE_AS_BTN-'), sg.Text(size=(80, 1), key='-FILE_TO_SAVE-')]
+    ]
 
-while True:
-    event, values = window.read()
-    print(event, values)
-    if event is None or event == 'Exit':
-        break
-    if event == '-READ_BTN-':
-        # filename = get_file_name_to_open(window, width=50)
-        filename = get_file_name_to_open(width=60, verb='処理する')
-        print('filename={}'.format(filename))
-        if filename:
-            window.FindElement('-FILE-').Update(filename)
-        else:
-            window.FindElement('-FILE-').Update('')
-    if event == '-SAVE_AS_BTN-':
-        filename = get_file_name_to_save()
-        print(filename)
+    window = sg.Window('File Browser', layout)
 
-window.Close()
+    while True:
+        event, values = window.read()
+        print(event, values)
+        if event is None or event == 'Exit':
+            break
+        if event == '-READ_BTN-':
+            # filename = get_file_name_to_open(window, width=50)
+            filename = get_file_name_to_open(width=60, verb='処理する')
+            print('filename={}'.format(filename))
+            if filename:
+                window.FindElement('-FILE-').Update(filename)
+            else:
+                window.FindElement('-FILE-').Update('')
+        if event == '-SAVE_AS_BTN-':
+            filename = get_file_name_to_save()
+            print(filename)
+
+    window.Close()
