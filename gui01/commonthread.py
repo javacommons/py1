@@ -29,6 +29,7 @@ class CommonThread(threading.Thread):
         for p in self.args:
             str_array.append(str(p))
         self.params = self.parser.parse_args(str_array)
+        return self.params
 
     def output(self, item, block=True, timeout=None):
         assert threading.current_thread() == self
@@ -64,7 +65,7 @@ class CommonThread(threading.Thread):
         return logging.debug(msg)
 
     @classmethod
-    def set_basic_logging(cls, level=logging.DEBUG, format='%(threadName)s: %(message)s'):
+    def setup_basic_logging(cls, level=logging.DEBUG, format='%(threadName)s: %(message)s'):
         logging.basicConfig(level=level, format=format)
 
     @classmethod
@@ -80,8 +81,9 @@ class CommonThread(threading.Thread):
         for thread in threading.enumerate():
             if not isinstance(thread, CommonThread):
                 continue
-            while not thread.outq.empty():
-                result.append(thread.outq.get())
+            # while not thread.outq.empty():
+            #     result.append(thread.outq.get())
+            result.extend(thread.receive_available())
         return result
 
     @classmethod

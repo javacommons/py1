@@ -54,7 +54,7 @@ if __name__ == '__main__':
     import logging
     import time
 
-    CommonThread.set_basic_logging(format='%(threadName)s ==> %(message)s')
+    CommonThread.setup_basic_logging(format='%(threadName)s ==> %(message)s')
 
     def worker1(th, *args, **kwargs):
         th.log_debug('start')
@@ -102,8 +102,8 @@ if __name__ == '__main__':
             self.add_argument('x')
             self.add_argument('y')
             # self.add_argument('z')
-            self.parse_args()
-            self.log_debug(self.params)
+            result = self.parse_args()
+            self.log_debug(result)
             while True:
                 inputs = self.inputs_available()
                 for i in inputs:
