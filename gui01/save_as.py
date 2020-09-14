@@ -18,17 +18,17 @@ if __name__ == '__main__':
             break
         if event == '-READ_BTN-':
             # filename = get_file_name_to_open(window, width=50)
-            filename = get_file_name_to_open(pattern='*.txt;*.bxproj', width=60, verb='処理する')
+            filename = sg_get_file_name_to_open(pattern='*.txt;*.bxproj', width=60, verb='処理する')
             print('filename={}'.format(filename))
             if filename:
                 window.FindElement('-FILE-').Update(filename)
             else:
                 window.FindElement('-FILE-').Update('')
         if event == '-SAVE_AS_BTN-':
-            filename = get_file_name_to_save(pattern='*.txt', )
+            filename = sg_get_file_name_to_save(pattern='*.txt', )
             print(filename)
         if event == '-FOLDER_BTN-':
-            filename = get_folder_name()
+            filename = sg_get_folder_name()
             print(filename)
 
     window.Close()
