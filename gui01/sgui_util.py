@@ -1,3 +1,22 @@
+def _sgui_parse_file_pattern(pattern):
+    pattern_list = pattern.split(';')
+    result = []
+    for p in pattern_list:
+        if p.startswith('*.'):
+            result.append(p[1:])
+    return result
+
+
+def _sgui_adjust_save_path(path, pattern):
+    suffix_list = _sgui_parse_file_pattern(pattern)
+    if len(suffix_list) == 0:
+        return path
+    for s in suffix_list:
+        if path.endswith(s):
+            return path
+    return path + suffix_list[0]
+
+
 def sgui_get_file_name_to_open(parent=None,
                                pattern='*.*',
                                width=50,
@@ -103,6 +122,7 @@ def sgui_get_file_name_to_save(parent=None,
                 continue
             else:
                 abspath = os.path.abspath(filename).replace('\\', '/')
+                abspath = _sgui_adjust_save_path(abspath, pattern)
                 if filename != abspath:
                     filename = abspath
                     finished = False

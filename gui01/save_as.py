@@ -29,7 +29,7 @@ def gui_main():
                 window.FindElement('-FILE-').Update('')
         if event == '-SAVE_AS_BTN-':
             filename = sgui_get_file_name_to_save(
-                pattern='*.txt', old_value=window.FindElement('-FILE_TO_SAVE-').Get())
+                pattern='*.txt;*.log', old_value=window.FindElement('-FILE_TO_SAVE-').Get())
             print(filename)
             if filename:
                 window.FindElement('-FILE_TO_SAVE-').Update(filename)
