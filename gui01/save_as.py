@@ -91,22 +91,21 @@ if __name__ == '__main__':
 
     commonthread.CommonThread.set_basic_logging(format='%(threadName)s ==> %(message)s')
 
-    def worker1(thread, *args):
+    def worker1(th, *args):
         logging.debug('start')
         logging.debug(args)
-        thread.outq.put('from worker1')
+        th.outq.put('from worker1')
         time.sleep(2)
         logging.debug('end')
 
-    def worker3(thread, *args):
+    def worker3(th, *args):
         logging.debug('start')
         logging.debug(args)
-        thread.outq.put('from worker3')
-        thread.parser.add_argument('x')
-        thread.parser.add_argument('y')
+        th.parser.add_argument('x')
+        th.parser.add_argument('y')
         # thread.parser.add_argument('z')
-        thread.parse()
-        logging.debug(thread.args)
+        th.parse()
+        logging.debug(th.args)
         time.sleep(2)
         logging.debug('end')
 
@@ -116,8 +115,7 @@ if __name__ == '__main__':
             commonthread.CommonThread.__init__(self, *args)
 
         def run(self):
-            logging.debug('Starting Thread named {}, args={} inq={}, outq={}'.format(
-                self.name, self.params, self.inq, self.outq))
+            logging.debug('Starting Thread named {}, args={}'.format(self.name, self.params))
             self.outq.put(['this', 'is', 'array'])
             logging.debug(self.params)
             for i in self.params:
@@ -149,6 +147,7 @@ if __name__ == '__main__':
     t1.start()
 
     t2 = ParserThread('123', '456')
+    t2.name = 't2@ParserThread'
     t2.start()
 
     t3 = commonthread.WorkerThread(worker3, 'abc', 'XYZ')
