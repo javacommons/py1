@@ -117,6 +117,23 @@ if __name__ == '__main__':
         time.sleep(5)
         logging.debug('end')
 
+
+    class myThread(threading.Thread):
+        def __init__(self, counter, *args):
+            threading.Thread.__init__(self)
+            # self.threadID = threadID
+            # self.name = name
+            self.counter = counter
+            self.args = args
+
+        def run(self):
+            logging.debug('Starting Thread named {}, counter {}'.format(self.name, self.counter))
+            print('Starting Thread named {}, counter {}'.format(self.name, self.counter))
+            for i in self.args:
+                print(i)
+
+    t0 = myThread(2, 'ONE', 'TWO', 'THREE')
+    t0.start()
     # スレッドに workder1 関数を渡す
     t1 = threading.Thread(name='Thread-A', target=worker1)
     t2 = threading.Thread(target=worker2, args=(q,), kwargs={'y': 200, 'argv': ['a', 123, 456.7]})
@@ -133,3 +150,13 @@ if __name__ == '__main__':
         if q.empty(): continue
         x = q.get()
         print(x)
+
+    class MyClass:
+        def __init__(self, num):
+            self.num = num
+        def print_num(self):
+            print(self.num)
+
+    mc = MyClass(32)
+    mc.print_num()
+    print(mc.num)
