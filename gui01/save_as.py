@@ -32,3 +32,13 @@ if __name__ == '__main__':
             print(filename)
 
     window.Close()
+
+    import os, time, sys, subprocess
+
+    # o = subprocess.run([sys.executable, "longtask.py", '123'], check=False, capture_output=True)
+    # print((o.stdout, o.stderr))
+
+    subprocess.run([sys.executable, "longtask.py", '-h'], stderr=sys.stderr, stdout=sys.stdout)
+    subprocess.run([sys.executable, "longtask.py", '11', '22'], stderr=sys.stderr, stdout=sys.stdout)
+
+    print('end')
