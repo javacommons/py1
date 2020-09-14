@@ -50,36 +50,6 @@ def gui_main():
     # task_subprocess_run1(__file__, ['install', '-s', '{type=msys32, font_size=14}', '11', '22'])
     # task_subprocess_run1(__file__, ['install', '-w', '-s={type=msys32, font_size=14}', '11', '22'])
 
-
-def console_main():
-    import argparse
-    parser = argparse.ArgumentParser(description='description of this program')
-    parser.add_argument('--argX')
-    parser.add_argument('-w', action='store_true')
-    parser.add_argument('operation', choices=['install', 'uninstall', 'update'], help='type of operation')
-    parser.add_argument('--spec', '-s', required=True)
-    parser.add_argument('inst_dir', help='installation directory')
-    parser.add_argument('rest', nargs='*', help='file or directory')
-
-    # args = parser.parse_args()
-    # # print('arg1={}'.format(args.arg1))
-    # # print('arg2={}'.format(args.arg2))
-    # print('operation={}'.format(args.operation))
-    # print('spec={}'.format(args.spec))
-    # print('inst_dir={}'.format(args.inst_dir))
-    # print('argX={}'.format(args.argX))
-    # print('w={}'.format(args.w))
-    # print('rest={}'.format(args.rest))
-
-    args2 = parser.parse_args(['uninstall', '-w', '-s={type=msys32, font_size=14}', '123', '456'])
-    print('operation={}'.format(args2.operation))
-    print('spec={}'.format(args2.spec))
-    print('inst_dir={}'.format(args2.inst_dir))
-    print('argX={}'.format(args2.argX))
-    print('w={}'.format(args2.w))
-    print('rest={}'.format(args2.rest))
-
-
 if __name__ == '__main__':
     print(len(sys.argv))
 
@@ -102,9 +72,12 @@ if __name__ == '__main__':
     def worker3(th, *args):
         th.log_debug('start')
         th.log_debug(args)
+        th.add_argument('operation', choices=['install', 'uninstall', 'update'], help='type of operation')
         th.add_argument('x')
         th.add_argument('y')
         th.add_argument('-z', required=True)
+        th.add_argument('-w', action='store_true')
+        th.add_argument('rest', nargs='*', help='file or directory')
         th.parse_args()
         th.log_debug(th.args)
         time.sleep(2)
@@ -151,7 +124,7 @@ if __name__ == '__main__':
     t2.name = 't2@ParserThread'
     t2.start()
 
-    t3 = commonthread.WorkerThread(worker3, 'abc', 'XYZ', '-z', 78.654321)
+    t3 = commonthread.WorkerThread(worker3, 'install', '-z', 78.654321, 'abc', 'XYZ', 123, 456)
     t3.name = "worker3"
     t3.start()
 
@@ -166,4 +139,3 @@ if __name__ == '__main__':
     # t1.join()
 
     print(commonthread.CommonThread.some_are_active())
-    console_main()
