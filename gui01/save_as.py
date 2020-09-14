@@ -17,9 +17,9 @@ def gui_main():
         if event is None or event == 'Exit':
             break
         if event == '-READ_BTN-':
-            # filename = get_file_name_to_open(window, width=50)
-            filename = psgui_get_file_name_to_open(
-                pattern='*.txt;*.bxproj', width=60, verb='処理する', old_value=window.FindElement('-FILE-').Get())
+            filename = psgui_get_file_name_to_open(window, pattern='*.txt;*.bxproj', width=50)
+            # filename = psgui_get_file_name_to_open(
+            #     pattern='*.txt;*.bxproj', width=60, verb='処理する', old_value=window.FindElement('-FILE-').Get())
             print('filename={}'.format(filename))
             if filename:
                 window.FindElement('-FILE-').Update(filename)
