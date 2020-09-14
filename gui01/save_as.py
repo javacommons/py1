@@ -1,6 +1,8 @@
 import sys
 import PySimpleGUI as sg
 from sgui_util import *
+from task_util import *
+
 
 def gui_main():
     layout = [
@@ -38,9 +40,9 @@ def gui_main():
     # o = subprocess.run([sys.executable, "longtask.py", '123'], check=False, capture_output=True)
     # print((o.stdout, o.stderr))
 
-    subprocess.run([sys.executable, __file__, '-h'], stderr=sys.stderr, stdout=sys.stdout)
-    subprocess.run([sys.executable, __file__, 'install', '-s', '{type=msys32, font_size=14}', '11', '22'], stderr=sys.stderr, stdout=sys.stdout)
-    subprocess.run([sys.executable, __file__, 'install', '-w', '-s={type=msys32, font_size=14}', '11', '22'], stderr=sys.stderr, stdout=sys.stdout)
+    task_subprocess_run1(__file__, ['-h'])
+    task_subprocess_run1(__file__, ['install', '-s', '{type=msys32, font_size=14}', '11', '22'])
+    task_subprocess_run1(__file__, ['install', '-w', '-s={type=msys32, font_size=14}', '11', '22'])
 
 
 def console_main():
@@ -63,13 +65,13 @@ def console_main():
     print('w={}'.format(args.w))
     print('rest={}'.format(args.rest))
 
-    args2 = parser.parse_args(['uninstall', '-w', '-s={type=msys32, font_size=14}', '123', '456'])
-    print('operation={}'.format(args2.operation))
-    print('spec={}'.format(args2.spec))
-    print('inst_dir={}'.format(args2.inst_dir))
-    print('argX={}'.format(args2.argX))
-    print('w={}'.format(args2.w))
-    print('rest={}'.format(args2.rest))
+    # args2 = parser.parse_args(['uninstall', '-w', '-s={type=msys32, font_size=14}', '123', '456'])
+    # print('operation={}'.format(args2.operation))
+    # print('spec={}'.format(args2.spec))
+    # print('inst_dir={}'.format(args2.inst_dir))
+    # print('argX={}'.format(args2.argX))
+    # print('w={}'.format(args2.w))
+    # print('rest={}'.format(args2.rest))
 
 
 if __name__ == '__main__':
@@ -83,3 +85,31 @@ if __name__ == '__main__':
     print(['11', 22] + ['A', 'B'])
 
     print('end')
+
+    import logging
+    import threading
+    import time
+
+    logging.basicConfig(level=logging.DEBUG, format='%(threadName)s: %(message)s')
+
+    def worker1():
+        # thread の名前を取得
+        logging.debug('start')
+        time.sleep(5)
+        logging.debug('end')
+
+
+    def worker2(x, y=1):
+        logging.debug('start')
+        logging.debug(x)
+        logging.debug(y)
+        time.sleep(5)
+        logging.debug('end')
+
+    # スレッドに workder1 関数を渡す
+    t1 = threading.Thread(name='rename worker1', target=worker1)
+    t2 = threading.Thread(target=worker2, args=([100, 200, 300],), kwargs={'y': 200})
+    # スレッドスタート
+    t1.start()
+    t2.start()
+    print('started')
