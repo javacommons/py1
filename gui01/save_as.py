@@ -39,17 +39,17 @@ def gui_main():
     # print((o.stdout, o.stderr))
 
     subprocess.run([sys.executable, __file__, '-h'], stderr=sys.stderr, stdout=sys.stdout)
-    subprocess.run([sys.executable, __file__, 'install', '11', '22'], stderr=sys.stderr, stdout=sys.stdout)
+    subprocess.run([sys.executable, __file__, 'install', '-s', '{type=msys32, font_size=14}', '11', '22'], stderr=sys.stderr, stdout=sys.stdout)
+    subprocess.run([sys.executable, __file__, 'install', '-w', '-s={type=msys32, font_size=14}', '11', '22'], stderr=sys.stderr, stdout=sys.stdout)
 
 
 def console_main():
     import argparse
     parser = argparse.ArgumentParser(description='description of this program')
-    # parser.add_argument('arg1', help='Help of arg1')
-    # parser.add_argument('arg2', help='Help of arg2')
-    parser.add_argument('--arg3')
-    parser.add_argument('--arg4', '-a', required=True)
+    parser.add_argument('--argX')
+    parser.add_argument('-w', action='store_true')
     parser.add_argument('operation', choices=['install', 'uninstall', 'update'], help='type of operation')
+    parser.add_argument('--spec', '-s', required=True)
     parser.add_argument('inst_dir', help='installation directory')
     parser.add_argument('rest', nargs='*', help='file or directory')
 
@@ -57,9 +57,10 @@ def console_main():
     # print('arg1={}'.format(args.arg1))
     # print('arg2={}'.format(args.arg2))
     print('operation={}'.format(args.operation))
+    print('spec={}'.format(args.spec))
     print('inst_dir={}'.format(args.inst_dir))
-    print('arg3={}'.format(args.arg3))
-    print('arg4={}'.format(args.arg4))
+    print('argX={}'.format(args.argX))
+    print('w={}'.format(args.w))
     print('rest={}'.format(args.rest))
 
 
