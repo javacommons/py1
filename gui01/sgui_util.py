@@ -1,9 +1,9 @@
-def sg_get_file_name_to_open(parent=None,
-                             pattern='*.*',
-                             width=50,
-                             message='開くファイルを指定してください',
-                             title='ファイルを開く',
-                             verb='開く'):
+def sgui_get_file_name_to_open(parent=None,
+                               pattern='*.*',
+                               width=50,
+                               message='開くファイルを指定してください',
+                               title='ファイルを開く',
+                               verb='開く'):
     import PySimpleGUI as sg
     import os
     keep_on_top = True
@@ -45,12 +45,12 @@ def sg_get_file_name_to_open(parent=None,
     return None if not filename else filename.replace('\\', '/')
 
 
-def sg_get_file_name_to_save(parent=None,
-                             pattern='*.*',
-                             width=50,
-                             message='保存先のファイルを指定してください',
-                             title='名前を付けて保存',
-                             verb='保存'):
+def sgui_get_file_name_to_save(parent=None,
+                               pattern='*.*',
+                               width=50,
+                               message='保存先のファイルを指定してください',
+                               title='名前を付けて保存',
+                               verb='保存'):
     import PySimpleGUI as sg
     import os
     keep_on_top = True
@@ -103,11 +103,11 @@ def sg_get_file_name_to_save(parent=None,
     return None if not filename else filename.replace('\\', '/')
 
 
-def sg_get_folder_name(parent=None,
-                       width=50,
-                       message='フォルダを指定してください',
-                       title='フォルダ選択',
-                       verb='選択'):
+def sgui_get_folder_name(parent=None,
+                         width=50,
+                         message='フォルダを指定してください',
+                         title='フォルダ選択',
+                         verb='選択'):
     import PySimpleGUI as sg
     import os
     keep_on_top = True
