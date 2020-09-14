@@ -15,6 +15,12 @@ class CommonThread(threading.Thread):
         self.parser = argparse.ArgumentParser()
         self.params = None
 
+    def entry(self, *args, **kwargs):
+        pass
+
+    def run(self):
+        self.entry(*self.args, **self.kwargs)
+
     def add_argument(self, *args, **kwargs):
         self.parser.add_argument(*args, **kwargs)
 

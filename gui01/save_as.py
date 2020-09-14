@@ -49,12 +49,12 @@ if __name__ == '__main__':
 
     gui_main()
 
-    import commonthread
+    from commonthread import *
     import datetime
     import logging
     import time
 
-    commonthread.CommonThread.set_basic_logging(format='%(threadName)s ==> %(message)s')
+    CommonThread.set_basic_logging(format='%(threadName)s ==> %(message)s')
 
     def worker1(th, *args, **kwargs):
         th.log_debug('start')
@@ -78,13 +78,14 @@ if __name__ == '__main__':
         time.sleep(2)
         th.log_debug('end')
 
-    class MyThread(commonthread.CommonThread):
+    class MyThread(CommonThread):
 
-        def __init__(self, *args):
-            commonthread.CommonThread.__init__(self, *args)
+        def __init__(self, *args, **kwargs):
+            CommonThread.__init__(self, *args, **kwargs)
 
-        def run(self):
-            self.log_debug('Starting Thread named {}, args={}'.format(self.name, self.args))
+        # def run(self):
+        def entry(self, *args, **kwargs):
+            self.log_debug('Starting Thread named {}, args={}, kwargs={}'.format(self.name, args, kwargs))
             self.outq.put(['this', 'is', 'array'])
             self.log_debug(self.args)
             for i in self.args:
@@ -93,10 +94,10 @@ if __name__ == '__main__':
             time.sleep(5)
             self.log_debug('end')
 
-    class ParserThread(commonthread.CommonThread):
+    class ParserThread(CommonThread):
 
-        def __init__(self, *args):
-            commonthread.CommonThread.__init__(self, *args)
+        def __init__(self, *args, **kwargs):
+            CommonThread.__init__(self, *args, **kwargs)
 
         def run(self):
             self.add_argument('x')
@@ -107,11 +108,11 @@ if __name__ == '__main__':
 
     logging.debug('starting')
 
-    t0 = MyThread('ONE', 'TWO', 'THREE')
+    t0 = MyThread('ONE', 'TWO', 'THREE', required=True)
     t0.name = 'MyThread'
     t0.start()
 
-    t1 = commonthread.WorkerThread(worker1, 123, 'abc', 4.56, kw1=1, kw2='abcxyz')
+    t1 = WorkerThread(worker1, 123, 'abc', 4.56, kw1=1, kw2='abcxyz')
     t1.name = "worker1"
     t1.start()
 
@@ -119,18 +120,18 @@ if __name__ == '__main__':
     t2.name = 't2@ParserThread'
     t2.start()
 
-    t3 = commonthread.WorkerThread(worker3, 'install', '-z', 78.654321, 'abc', 'XYZ', 123, 456)
+    t3 = WorkerThread(worker3, 'install', '-z', 78.654321, 'abc', 'XYZ', 123, 456)
     t3.name = "worker3"
     t3.start()
 
     logging.debug('started')
-    print(commonthread.CommonThread.some_are_active())
-    while commonthread.CommonThread.some_are_active():
+    print(CommonThread.some_are_active())
+    while CommonThread.some_are_active():
         time.sleep(0.001)
-        commonthread.CommonThread.log_threads_output(use_print=True)
-    commonthread.CommonThread.log_threads_output(use_print=True)
+        CommonThread.log_threads_output(use_print=True)
+    CommonThread.log_threads_output(use_print=True)
 
     # t0.join()
     # t1.join()
 
-    print(commonthread.CommonThread.some_are_active())
+    print(CommonThread.some_are_active())
