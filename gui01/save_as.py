@@ -21,18 +21,27 @@ def gui_main():
         if event == '-READ_BTN-':
             # filename = get_file_name_to_open(window, width=50)
             filename = sgui_get_file_name_to_open(
-                pattern='*.txt;*.bxproj', width=60, verb='処理する', initial_folder='C:/temp')
+                pattern='*.txt;*.bxproj', width=60, verb='処理する', old_value=window.FindElement('-FILE-').Get())
             print('filename={}'.format(filename))
             if filename:
                 window.FindElement('-FILE-').Update(filename)
             else:
                 window.FindElement('-FILE-').Update('')
         if event == '-SAVE_AS_BTN-':
-            filename = sgui_get_file_name_to_save(pattern='*.txt', initial_folder='C:/temp')
+            filename = sgui_get_file_name_to_save(
+                pattern='*.txt', old_value=window.FindElement('-FILE_TO_SAVE-').Get())
             print(filename)
+            if filename:
+                window.FindElement('-FILE_TO_SAVE-').Update(filename)
+            else:
+                window.FindElement('-FILE_TO_SAVE-').Update('')
         if event == '-FOLDER_BTN-':
-            filename = sgui_get_folder_name(initial_folder='C:/temp')
+            filename = sgui_get_folder_name(old_value=window.FindElement('-FOLDER-').Get())
             print(filename)
+            if filename:
+                window.FindElement('-FOLDER-').Update(filename)
+            else:
+                window.FindElement('-FOLDER-').Update('')
 
     window.Close()
 
