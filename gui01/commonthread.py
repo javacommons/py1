@@ -28,6 +28,17 @@ class CommonThread(threading.Thread):
                 logging.debug(thread.outq.get())
 
 
+class ArgumentParserThread(CommonThread):
+
+    def __init__(self, *params):
+        CommonThread.__init__(self, *params)
+        self.parser = argparse.ArgumentParser()
+        self.args = None
+
+    def parse(self):
+        self.args = self.parser.parse_args(self.params)
+
+
 class WorkerThreadParams:
 
     def __init__(self, inq, outq):
@@ -45,14 +56,3 @@ class WorkerThread(CommonThread):
         o = WorkerThreadParams(self.inq, self.outq)
         self.worker_function(o, *self.params)
         return None
-
-
-class ArgumentParserThread(CommonThread):
-
-    def __init__(self, *params):
-        CommonThread.__init__(self, *params)
-        self.parser = argparse.ArgumentParser()
-        self.args = None
-
-    def parse(self):
-        self.args = self.parser.parse_args(self.params)
