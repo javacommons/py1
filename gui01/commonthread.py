@@ -11,6 +11,11 @@ class CommonThread(threading.Thread):
         self.params = params
         self.inq = queue.Queue()
         self.outq = queue.Queue()
+        self.parser = argparse.ArgumentParser()
+        self.args = None
+
+    def parse(self):
+        self.args = self.parser.parse_args(self.params)
 
     @classmethod
     def set_basic_logging(cls, level=logging.DEBUG, format='%(threadName)s: %(message)s'):
@@ -43,21 +48,10 @@ class CommonThread(threading.Thread):
                 logging.debug(msg)
 
 
-class ArgumentParserThread(CommonThread):
-
-    def __init__(self, *params):
-        CommonThread.__init__(self, *params)
-        self.parser = argparse.ArgumentParser()
-        self.args = None
-
-    def parse(self):
-        self.args = self.parser.parse_args(self.params)
-
-
-class WorkerThread(ArgumentParserThread):
+class WorkerThread(CommonThread):
 
     def __init__(self, worker_function, *params):
-        ArgumentParserThread.__init__(self, *params)
+        CommonThread.__init__(self, *params)
         self.worker_function = worker_function
 
     def run(self):

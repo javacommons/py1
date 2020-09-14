@@ -126,10 +126,10 @@ if __name__ == '__main__':
             time.sleep(5)
             logging.debug('end')
 
-    class ParserThread(commonthread.ArgumentParserThread):
+    class ParserThread(commonthread.CommonThread):
 
         def __init__(self, *args):
-            commonthread.ArgumentParserThread.__init__(self, *args)
+            commonthread.CommonThread.__init__(self, *args)
 
         def run(self):
             self.parser.add_argument('x')
