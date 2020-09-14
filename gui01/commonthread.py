@@ -1,3 +1,4 @@
+import argparse
 import logging
 import queue
 import threading
@@ -5,9 +6,9 @@ import threading
 
 class CommonThread(threading.Thread):
 
-    def __init__(self, *args):
+    def __init__(self, *params):
         threading.Thread.__init__(self)
-        self.args = args
+        self.params = params
         self.inq = queue.Queue()
         self.outq = queue.Queue()
 
@@ -36,11 +37,22 @@ class WorkerThreadParams:
 
 class WorkerThread(CommonThread):
 
-    def __init__(self, worker_function, *args):
-        CommonThread.__init__(self, *args)
+    def __init__(self, worker_function, *params):
+        CommonThread.__init__(self, *params)
         self.worker_function = worker_function
 
     def run(self):
         o = WorkerThreadParams(self.inq, self.outq)
-        self.worker_function(o, *self.args)
+        self.worker_function(o, *self.params)
         return None
+
+
+class ArgParserThread(CommonThread):
+
+    def __init__(self, *params):
+        CommonThread.__init__(self, *params)
+        self.parser = argparse.ArgumentParser()
+        self.args = None
+
+    def parse(self):
+        self.args = self.parser.parse_args(self.params)

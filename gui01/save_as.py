@@ -107,10 +107,10 @@ if __name__ == '__main__':
 
         def run(self):
             logging.debug('Starting Thread named {}, args={} inq={}, outq={}'.format(
-                self.name, self.args, self.inq, self.outq))
+                self.name, self.params, self.inq, self.outq))
             self.outq.put(['this', 'is', 'array'])
-            logging.debug(self.args)
-            for i in self.args:
+            logging.debug(self.params)
+            for i in self.params:
                 logging.debug(i)
                 self.outq.put(i)
             time.sleep(5)
