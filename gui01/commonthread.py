@@ -14,11 +14,23 @@ class CommonThread(threading.Thread):
         self.parser = argparse.ArgumentParser()
         self.args = None
 
-    def parse(self):
+    def add_argument(self, *args, **kwargs):
+        self.parser.add_argument(*args, **kwargs)
+
+    def parse_args(self):
         str_array = []
         for p in self.params:
             str_array.append(str(p))
         self.args = self.parser.parse_args(str_array)
+
+    def output(self, item, block=True, timeout=None):
+        return self.outq.put(item, block, timeout)
+
+    def input(self, block=True, timeout=None):
+        return self.outq.get(block, timeout)
+
+    def log_debug(self, msg):
+        return logging.debug(msg)
 
     @classmethod
     def set_basic_logging(cls, level=logging.DEBUG, format='%(threadName)s: %(message)s'):

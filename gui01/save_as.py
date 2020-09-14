@@ -86,28 +86,29 @@ if __name__ == '__main__':
     gui_main()
 
     import commonthread
+    import datetime
     import logging
     import time
 
     commonthread.CommonThread.set_basic_logging(format='%(threadName)s ==> %(message)s')
 
     def worker1(th, *args):
-        logging.debug('start')
-        logging.debug(args)
-        th.outq.put('from worker1')
+        th.log_debug('start')
+        th.log_debug(args)
+        th.output('from worker1')
         time.sleep(2)
-        logging.debug('end')
+        th.log_debug('end')
 
     def worker3(th, *args):
-        logging.debug('start')
-        logging.debug(args)
-        th.parser.add_argument('x')
-        th.parser.add_argument('y')
-        # thread.parser.add_argument('z')
-        th.parse()
-        logging.debug(th.args)
+        th.log_debug('start')
+        th.log_debug(args)
+        th.add_argument('x')
+        th.add_argument('y')
+        th.add_argument('-z', required=True)
+        th.parse_args()
+        th.log_debug(th.args)
         time.sleep(2)
-        logging.debug('end')
+        th.log_debug('end')
 
     class MyThread(commonthread.CommonThread):
 
@@ -115,14 +116,14 @@ if __name__ == '__main__':
             commonthread.CommonThread.__init__(self, *args)
 
         def run(self):
-            logging.debug('Starting Thread named {}, args={}'.format(self.name, self.params))
+            self.log_debug('Starting Thread named {}, args={}'.format(self.name, self.params))
             self.outq.put(['this', 'is', 'array'])
-            logging.debug(self.params)
+            self.log_debug(self.params)
             for i in self.params:
-                logging.debug(i)
-                self.outq.put(i)
+                self.log_debug(i)
+                self.output(i)
             time.sleep(5)
-            logging.debug('end')
+            self.log_debug('end')
 
     class ParserThread(commonthread.CommonThread):
 
@@ -130,11 +131,11 @@ if __name__ == '__main__':
             commonthread.CommonThread.__init__(self, *args)
 
         def run(self):
-            self.parser.add_argument('x')
-            self.parser.add_argument('y')
-            # self.parser.add_argument('z')
-            self.parse()
-            logging.debug(self.args)
+            self.add_argument('x')
+            self.add_argument('y')
+            # self.add_argument('z')
+            self.parse_args()
+            self.log_debug(self.args)
 
     logging.debug('starting')
 
@@ -146,11 +147,11 @@ if __name__ == '__main__':
     t1.name = "worker1"
     t1.start()
 
-    t2 = ParserThread(123, '456')
+    t2 = ParserThread(123, datetime.datetime(2017, 9, 1, 12, 12))
     t2.name = 't2@ParserThread'
     t2.start()
 
-    t3 = commonthread.WorkerThread(worker3, 'abc', 'XYZ')
+    t3 = commonthread.WorkerThread(worker3, 'abc', 'XYZ', '-z=zzz')
     t3.name = "worker3"
     t3.start()
 
