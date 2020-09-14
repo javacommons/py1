@@ -15,8 +15,7 @@ def get_file_name_to_open(parent=None,
         parent.Hide()
     # print(keep_on_top)
     filename = ''
-    finished = False
-    while not finished:
+    while True:
         event, values = sg.Window(title,
                                   [[sg.Text(message)],
                                    [sg.Input(filename, size=(width, 1), key='-FILE-'), sg.FileBrowse('参照')],
@@ -28,15 +27,15 @@ def get_file_name_to_open(parent=None,
             filename = values['-FILE-']
             filename = filename.strip()
             if os.path.isfile(filename):
-                finished = True
+                break
             else:
                 sg.popup('ファイル"{}"は存在しません'.format(filename))
-                finished = False
+                continue
         else:
-            finished = True
+            break
     if parent:
         parent.UnHide()
-    return filename
+    return filename.replace('\\', '/')
 
 def get_file_name_to_save(parent=None,
                           message='保存先のファイルを指定してください',
@@ -49,8 +48,7 @@ def get_file_name_to_save(parent=None,
         parent.Hide()
     # print(keep_on_top)
     filename = ''
-    finished = False
-    while not finished:
+    while True:
         event, values = sg.Window(title,
                                   [[sg.Text(message)],
                                    [sg.Input(filename, size=(width, 1), key='-FILE-'), sg.FileSaveAs('参照')],
@@ -62,15 +60,12 @@ def get_file_name_to_save(parent=None,
             filename = values['-FILE-']
             filename = filename.strip()
             if os.path.isfile(filename):
-                finished = True
+                break
             elif filename == '':
                 sg.popup('ファイル名が入力されていません')
-                finished = False
-            elif os.access(filename, os.W_OK):
-                sg.popup('ファイル"{}"は書き込み可能です'.format(filename))
-                finished = True
+                continue
             else:
-                abspath = os.path.abspath(filename)
+                abspath = os.path.abspath(filename).replace('\\', '/')
                 if filename != abspath:
                     filename = abspath
                     finished = False
@@ -81,19 +76,19 @@ def get_file_name_to_save(parent=None,
                     if sg.popup_yes_no('フォルダ"{}"は存在しません。作成しますか？'.format(dirname)):
                         try:
                             os.makedirs(dirname)
-                            finished = True
+                            break
                         except Exception:
                             sg.popup('フォルダ"{}"を作成できませんでした'.format(dirname))
-                            finished = False
+                            continue
                     else:
-                        finished = False
+                        break
                 else:
-                    finished = True
+                    break
         else:
-            finished = True
+            break
     if parent:
         parent.UnHide()
-    return filename
+    return filename.replace('\\', '/')
 
 
 layout = [
