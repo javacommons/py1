@@ -15,7 +15,6 @@ class CommonThread(threading.Thread):
     def some_are_active(cls):
         for thread in threading.enumerate():
             if isinstance(thread, CommonThread):
-                # print('thread.name={}'.format(thread.name))
                 return True
         return False
 
@@ -29,10 +28,11 @@ class CommonThread(threading.Thread):
 
 
 class WorkerThread(CommonThread):
+
     def __init__(self, worker_function, *args):
         CommonThread.__init__(self, *args)
         self.worker_function = worker_function
 
     def run(self):
-        self.worker_function(*self.args)
+        self.worker_function(self.inq, self.outq, *self.args)
         return None

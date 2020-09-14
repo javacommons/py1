@@ -85,39 +85,20 @@ if __name__ == '__main__':
 
     gui_main()
 
-    # if len(sys.argv) <= 1:
-    #     gui_main()
-    # else:
-    #     console_main()
-    #
-    # print('end')
-
-    import logging
-    import threading
-    import time
-    import queue
     import commonthread
+    import logging
+    import time
 
     logging.basicConfig(level=logging.DEBUG, format='%(threadName)s: %(message)s')
 
-    q = queue.Queue()
 
-    def worker1(*args):
+    def worker1(inq, outq, *args):
         # thread の名前を取得
         logging.debug('start')
         logging.debug(args)
+        outq.put('from worker1')
         time.sleep(2)
         logging.debug('end')
-
-    def worker2(q, y=1, argv=[]):
-        logging.debug('start')
-        logging.debug(q)
-        logging.debug(y)
-        logging.debug('argv={}'.format(argv))
-        q.put('q-1')
-        time.sleep(5)
-        logging.debug('end')
-
 
     class MyThread(commonthread.CommonThread):
         def __init__(self, *args):
@@ -135,16 +116,15 @@ if __name__ == '__main__':
             logging.debug('end')
 
     logging.debug('starting')
+
     t0 = MyThread('ONE', 'TWO', 'THREE')
+    t0.name = 'MyThread'
     t0.start()
-    # スレッドに workder1 関数を渡す
-    # t1 = threading.Thread(name='Thread-A', target=worker1)
+
     t1 = commonthread.WorkerThread(worker1, 123, 'abc', 4.56)
     t1.name = "worker1"
-    t2 = threading.Thread(target=worker2, args=(q,), kwargs={'y': 200, 'argv': ['a', 123, 456.7]})
-    # スレッドスタート
     t1.start()
-    t2.start()
+
     logging.debug('started')
     print(commonthread.CommonThread.some_are_active())
     while commonthread.CommonThread.some_are_active():
@@ -154,6 +134,5 @@ if __name__ == '__main__':
 
     # t0.join()
     # t1.join()
-    # t2.join()
 
     print(commonthread.CommonThread.some_are_active())
