@@ -15,7 +15,10 @@ class CommonThread(threading.Thread):
         self.args = None
 
     def parse(self):
-        self.args = self.parser.parse_args(self.params)
+        str_array = []
+        for p in self.params:
+            str_array.append(str(p))
+        self.args = self.parser.parse_args(str_array)
 
     @classmethod
     def set_basic_logging(cls, level=logging.DEBUG, format='%(threadName)s: %(message)s'):

@@ -146,7 +146,7 @@ if __name__ == '__main__':
     t1.name = "worker1"
     t1.start()
 
-    t2 = ParserThread('123', '456')
+    t2 = ParserThread(123, '456')
     t2.name = 't2@ParserThread'
     t2.start()
 
