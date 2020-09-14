@@ -44,14 +44,8 @@ def gui_main():
 
     window.Close()
 
-    import os, time, sys, subprocess
-
-    # task_subprocess_run1(__file__, ['-h'])
-    # task_subprocess_run1(__file__, ['install', '-s', '{type=msys32, font_size=14}', '11', '22'])
-    # task_subprocess_run1(__file__, ['install', '-w', '-s={type=msys32, font_size=14}', '11', '22'])
 
 if __name__ == '__main__':
-    print(len(sys.argv))
 
     gui_main()
 
@@ -62,9 +56,10 @@ if __name__ == '__main__':
 
     commonthread.CommonThread.set_basic_logging(format='%(threadName)s ==> %(message)s')
 
-    def worker1(th, *args):
+    def worker1(th, *args, **kwargs):
         th.log_debug('start')
         th.log_debug(args)
+        th.log_debug(kwargs)
         th.output('from worker1')
         time.sleep(2)
         th.log_debug('end')
@@ -79,7 +74,7 @@ if __name__ == '__main__':
         th.add_argument('-w', action='store_true')
         th.add_argument('rest', nargs='*', help='file or directory')
         th.parse_args()
-        th.log_debug(th.args)
+        th.log_debug(th.params)
         time.sleep(2)
         th.log_debug('end')
 
@@ -89,10 +84,10 @@ if __name__ == '__main__':
             commonthread.CommonThread.__init__(self, *args)
 
         def run(self):
-            self.log_debug('Starting Thread named {}, args={}'.format(self.name, self.params))
+            self.log_debug('Starting Thread named {}, args={}'.format(self.name, self.args))
             self.outq.put(['this', 'is', 'array'])
-            self.log_debug(self.params)
-            for i in self.params:
+            self.log_debug(self.args)
+            for i in self.args:
                 self.log_debug(i)
                 self.output(i)
             time.sleep(5)
@@ -108,7 +103,7 @@ if __name__ == '__main__':
             self.add_argument('y')
             # self.add_argument('z')
             self.parse_args()
-            self.log_debug(self.args)
+            self.log_debug(self.params)
 
     logging.debug('starting')
 
@@ -116,7 +111,7 @@ if __name__ == '__main__':
     t0.name = 'MyThread'
     t0.start()
 
-    t1 = commonthread.WorkerThread(worker1, 123, 'abc', 4.56)
+    t1 = commonthread.WorkerThread(worker1, 123, 'abc', 4.56, kw1=1, kw2='abcxyz')
     t1.name = "worker1"
     t1.start()
 

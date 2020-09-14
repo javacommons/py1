@@ -6,22 +6,23 @@ import threading
 
 class CommonThread(threading.Thread):
 
-    def __init__(self, *params):
+    def __init__(self, *args, **kwargs):
         threading.Thread.__init__(self)
-        self.params = params
+        self.args = args
+        self.kwargs = kwargs
         self.inq = queue.Queue()
         self.outq = queue.Queue()
         self.parser = argparse.ArgumentParser()
-        self.args = None
+        self.params = None
 
     def add_argument(self, *args, **kwargs):
         self.parser.add_argument(*args, **kwargs)
 
     def parse_args(self):
         str_array = []
-        for p in self.params:
+        for p in self.args:
             str_array.append(str(p))
-        self.args = self.parser.parse_args(str_array)
+        self.params = self.parser.parse_args(str_array)
 
     def output(self, item, block=True, timeout=None):
         return self.outq.put(item, block, timeout)
@@ -65,10 +66,10 @@ class CommonThread(threading.Thread):
 
 class WorkerThread(CommonThread):
 
-    def __init__(self, worker_function, *params):
-        CommonThread.__init__(self, *params)
+    def __init__(self, worker_function, *args, **kwargs):
+        CommonThread.__init__(self, *args, **kwargs)
         self.worker_function = worker_function
 
     def run(self):
-        self.worker_function(self, *self.params)
+        self.worker_function(self, *self.args, **self.kwargs)
         return None
