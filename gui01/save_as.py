@@ -118,11 +118,9 @@ if __name__ == '__main__':
         logging.debug('end')
 
     class CommonThread(threading.Thread):
-        # all_threads = []
 
         def __init__(self, *args):
             threading.Thread.__init__(self)
-            # super(CommonThread, self).__init__(self)
             self.args = args
             self.inq = queue.Queue()
             self.outq = queue.Queue()
@@ -146,12 +144,13 @@ if __name__ == '__main__':
 
     class MyThread(CommonThread):
         def __init__(self, *args):
-            # CommonThread.__init__(self, *args)
-            super(MyThread, self).__init__(self, *args)
+            CommonThread.__init__(self, *args)
 
         def run(self):
             logging.debug('Starting Thread named {}, args={} inq={}, outq={}'.format(
                 self.name, self.args, self.inq, self.outq))
+            self.outq.put(['this', 'is', 'array'])
+            logging.debug(self.args)
             for i in self.args:
                 logging.debug(i)
                 self.outq.put(i)
@@ -177,6 +176,5 @@ if __name__ == '__main__':
     # t0.join()
     # t1.join()
     # t2.join()
-    print(CommonThread.some_are_active())
 
-    # logging.debug(len(CommonThread.all_threads))
+    print(CommonThread.some_are_active())
