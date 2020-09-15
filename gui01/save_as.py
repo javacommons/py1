@@ -1,3 +1,14 @@
+# Date
+# 置換例：$Date$
+# Revision
+# 置換例：$Rev$
+# Author
+# 置換例：$Author$
+# HeadURL
+# 置換例：$HeadURL$
+# Id
+# 置換例：$Id$
+
 import PySimpleGUI as sg
 from psgui_util import *
 
@@ -139,12 +150,7 @@ if __name__ == '__main__':
 
     logging.debug('started')
     print(CommonThread.some_are_active())
-    while CommonThread.some_are_active():
-        time.sleep(0.001)
-        CommonThread.log_threads_output(use_print=True)
-    CommonThread.log_threads_output(use_print=True)
 
-    # t0.join()
-    # t1.join()
+    CommonThread.join_all()
 
     print(CommonThread.some_are_active())
