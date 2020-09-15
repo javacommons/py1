@@ -149,8 +149,8 @@ if __name__ == '__main__':
     t2.send(None)
 
     logging.debug('started')
-    print(CommonThread.some_are_active())
+    print(CommonThread.are_active())
 
     CommonThread.join_all()
 
-    print(CommonThread.some_are_active())
+    print(CommonThread.are_active())
