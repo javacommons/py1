@@ -64,8 +64,8 @@ if __name__ == '__main__':
     import logging
     import time
 
-    CommonThreadLogger.setup_basic_logging(format='%(threadName)s ==> %(message)s')
     lg = CommonThreadLogger()
+    lg.setup_basic(format='%(threadName)s ==> %(message)s')
 
 
     def worker1(th, *args, **kwargs):
@@ -92,9 +92,6 @@ if __name__ == '__main__':
 
     class MyThread(CommonThread):
 
-        def __init__(self, *args, **kwargs):
-            CommonThread.__init__(self, *args, **kwargs)
-
         def entry(self, *args, **kwargs):
             lg.debug('Starting Thread named {}, args={}, kwargs={}'.format(self.name, args, kwargs))
             self.outq.put(['this', 'is', 'array'])
@@ -106,9 +103,6 @@ if __name__ == '__main__':
             lg.debug('end')
 
     class ParserThread(CommonThread):
-
-        def __init__(self, *args, **kwargs):
-            CommonThread.__init__(self, *args, **kwargs)
 
         def entry(self, *args, **kwargs):
             self.add_argument('x')
