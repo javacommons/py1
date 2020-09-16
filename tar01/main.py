@@ -18,13 +18,12 @@ def rmtree(top):
 tar = tarfile.open('C:/root/data/msys2-base-i686-20200517.tar.xz', 'r:xz')
 
 # tarアーカイブに含まれるファイル／フォルダ名を取得
-# for tarinfo in tar:
-#     print(tarinfo.name)
+for tarinfo in tar:
+    print(tarinfo.name)
 
 rmtree('./extracted')
 
 # tar.extractall('./extracted')
-# pip install pywin32
 
 import os, winshell
 from win32com.client import Dispatch

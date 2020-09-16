@@ -1,14 +1,3 @@
-# Date
-# 置換例：$Date$
-# Revision
-# 置換例：$Rev$
-# Author
-# 置換例：$Author$
-# HeadURL
-# 置換例：$HeadURL$
-# Id
-# 置換例：$Id$
-
 import PySimpleGUI as sg
 from psgui_util import *
 
