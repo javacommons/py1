@@ -1,0 +1,2 @@
+Python3でHTTP通信をする（Requestsを使う） - そうなんでげす https://www.soudegesu.com/post/python/http-request-with-requests/
+Requests: 人間のためのHTTP — requests-docs-ja 1.0.4 documentation https://requests-docs-ja.readthedocs.io/en/latest/

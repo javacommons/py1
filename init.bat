@@ -6,4 +6,5 @@ pip install -U pysimplegui
 pip install -U commonthread
 pip install -U psgui-util
 pip install -U wxPython
+pip install -U requests
 popd
