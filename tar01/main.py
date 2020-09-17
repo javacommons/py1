@@ -1,6 +1,10 @@
 import tarfile
 import os
 import stat
+from commonthread import *
+
+lg = CommonThreadLogger()
+lg.setup_basic()
 
 
 def rmtree(top):
@@ -17,24 +21,33 @@ def rmtree(top):
 
 tar = tarfile.open('C:/root/data/msys2-base-i686-20200517.tar.xz', 'r:xz')
 
+topdir = 'C:/temp/extracted'
+
 # tarアーカイブに含まれるファイル／フォルダ名を取得
-for tarinfo in tar:
-    print(tarinfo.name)
+# for tarinfo in tar:
+#     print(tarinfo.name)
 
-rmtree('./extracted')
+lg.debug('rmtree')
+rmtree(topdir)
 
-# tar.extractall('./extracted')
+lg.debug('extractall')
+tar.extractall(topdir)
 
+lg.debug('shortcut')
 import os, winshell
 from win32com.client import Dispatch
-desktop = winshell.desktop()
-path = os.path.join(desktop, "Media Player Classic.lnk")
-target = r"P:\Media\Media Player Classic\mplayerc.exe"
-wDir = r"P:\Media\Media Player Classic"
-icon = r"P:\Media\Media Player Classic\mplayerc.exe"
+# desktop = winshell.desktop()
+desktop = 'C:/temp/shortcuts'
+os.makedirs(desktop, exist_ok=True)
+path = os.path.join(desktop, "MinGW32 Terminal.lnk")
+target = topdir + "/msys32/mingw32.exe"
+wDir = ""
+icon = target
 shell = Dispatch('WScript.Shell')
 shortcut = shell.CreateShortCut(path)
 shortcut.Targetpath = target
 shortcut.WorkingDirectory = wDir
 shortcut.IconLocation = icon
 shortcut.save()
+
+lg.debug('end')
