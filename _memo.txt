@@ -1,2 +1,4 @@
 Python3でHTTP通信をする（Requestsを使う） - そうなんでげす https://www.soudegesu.com/post/python/http-request-with-requests/
 Requests: 人間のためのHTTP — requests-docs-ja 1.0.4 documentation https://requests-docs-ja.readthedocs.io/en/latest/
+Pythonでthreadingを使った非同期処理 - Qiita https://qiita.com/Gattaca/items/a63707aac2cdcccb6127
+Python - What is queue.task_done() used for? - Stack Overflow https://stackoverflow.com/questions/49637086/python-what-is-queue-task-done-used-for
