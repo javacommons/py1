@@ -3,3 +3,4 @@ Requests: 人間のためのHTTP — requests-docs-ja 1.0.4 documentation https:
 Pythonでthreadingを使った非同期処理 - Qiita https://qiita.com/Gattaca/items/a63707aac2cdcccb6127
 Python - What is queue.task_done() used for? - Stack Overflow https://stackoverflow.com/questions/49637086/python-what-is-queue-task-done-used-for
 Pythonの並列・並行処理サンプルコードまとめ - Qiita https://qiita.com/castaneai/items/9cc33817419896667f34
+threading – スレッドによる並列処理を管理する - Python Module of the Week http://ja.pymotw.com/2/threading/
