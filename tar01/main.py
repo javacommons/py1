@@ -2,6 +2,8 @@ import tarfile
 import os
 import stat
 from commonthread import *
+import winshell
+from win32com.client import Dispatch
 
 lg = CommonThreadLogger()
 lg.setup_basic()
@@ -34,8 +36,6 @@ lg.debug('extractall')
 tar.extractall(topdir)
 
 lg.debug('shortcut')
-import os, winshell
-from win32com.client import Dispatch
 # desktop = winshell.desktop()
 desktop = 'C:/temp/shortcuts'
 os.makedirs(desktop, exist_ok=True)
